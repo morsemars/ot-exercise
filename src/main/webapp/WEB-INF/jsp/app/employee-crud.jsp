@@ -213,13 +213,15 @@
 	<form class="row-fluid dtr-row" data-id={{id}}>
 		<input type="hidden" readonly="readonly" value="{{id}}" name="timesheet" data-id={{id}} />
 		<div class="span5">
-			<input type="datetime-local" readonly="readonly" value="{{timeIn}}" name="timeIn" data-id={{id}} />
+			<input type="datetime-local" readonly="readonly" value="{{timeInWithTime}}" name="timeIn" data-id={{id}} />
 		</div>
 		<div class="span5">
-			<input type="datetime-local" readonly="readonly" value="{{timeOut}}" name="timeOut" data-id={{id}} />
+			<input type="datetime-local" readonly="readonly" value="{{timeOutWithTime}}" name="timeOut" data-id={{id}} />
 		</div>
 		<div class="span2">
-			<i class='icon-save save-dtr-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-save save-skill-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-pencil edit-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-trash remove-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>
 		</div>
 	</form>
 </script>
@@ -230,6 +232,22 @@
 
 <tides:footer>
 	<script type="text/javascript">
+		var loadDTR = function(){
+			$('#dtr-body .dtr-container').empty();
+			var id = $('#timesheet').val();
+			$.getJSON(
+				'dailytimerecord/findByEmployeeId/' + id, // url
+				null, // data
+				function(DTRs) { // callback
+					var template = opentides3.template($('#dtr-template').html());
+					$.each(DTRs, function(i, DTR) {
+						var DTRRow = template(DTR);
+						$('#dtr-body .dtr-container').append(DTRRow);
+					})
+				}
+			);
+		};
+	
 		$(document).ready(function() {
 			
 			$("#employee-body").RESTful();
@@ -265,30 +283,33 @@
 					'timesheet/findByEmployeeId/' + id, // url
 					null, // data
 					function(timesheets) { // callback
-						console.log(timesheets);
 						var template = opentides3.template($('#timesheet-template').html());
 						$.each(timesheets, function(i, timesheet) {
 							var cutOff = template(timesheet);
 							$('#dtr-body #timesheet').append(cutOff);
-						})
+						});
+						loadDTR();
 					}
 				);
+			});
+			
+			$('#timesheet').change(function() {
+				loadDTR();
 			});
 			
 			$('#add-dtr').click(function() {
 				var dtr = {
 						id :$('#timesheet').val(),
-						timeIn : "",
-						timeOut : ""
+						timeOutWithTime : "",
+						timeInWithTime : ""
 					};
-				console.log(dtr);
 				var newDTRRow = opentides3.template($('#dtr-template').html(), dtr);
 				var newRow = $('#dtr-body .dtr-container').append(newDTRRow);
 				newRow = newRow.find('.dtr-row').last();
 				newRow.find('input').prop('readonly', false);
-				//newRow.find('.save-skill-action').removeClass('hide');
-				//newRow.find('.edit-action').addClass('hide');
-				//newRow.find('.remove-action').addClass('hide');
+				newRow.find('.save-skill-action').removeClass('hide');
+				newRow.find('.edit-action').addClass('hide');
+				newRow.find('.remove-action').addClass('hide');
 			});
 			
 			$('#add-skill').click(function() {
@@ -327,8 +348,6 @@
 			});
 		}).on('click', '.save-dtr-action', function() {
 			var dtrRow = $(this).closest('.dtr-row');
-			console.log(dtrRow.serialize());
-			console.log("${home}");
 			$.ajax({type : 'POST', // method
 				url : '${home}/dailytimerecord', // url
 				data : dtrRow.serialize(), // data
