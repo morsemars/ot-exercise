@@ -73,9 +73,9 @@
 						<script type="text/template" class="template">
 	                		<tr id="timesheet-row-{{id}}" data-id="{{id}}">
 								<!-- Define template here -->
-								<td>{{record.employee.fullName}}</td>
-								<td>{{record.startCutOff}}</td>
-								<td>{{record.endCutOff}}</td>
+								<td>{{startCutOff}}</td>
+								<td>{{endCutOff}}</td>
+								<td>{{employee.fullName}}</td>
 								<td>
 									<i class='icon-pencil edit-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
 									<i class='icon-trash remove-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>

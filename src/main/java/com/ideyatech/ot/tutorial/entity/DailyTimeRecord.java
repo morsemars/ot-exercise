@@ -1,5 +1,6 @@
 package com.ideyatech.ot.tutorial.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -20,11 +21,14 @@ public class DailyTimeRecord extends BaseEntity{
 	
 	@Column(name="TIME_IN")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date timeIN;
+	private Date timeIn;
 	
 	@Column(name="TIME_OUT")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date timeOut;
+	
+	@Transient
+	private String time_in;
 	
 	@Transient
 	private int ot;
@@ -33,12 +37,12 @@ public class DailyTimeRecord extends BaseEntity{
 	@JoinColumn(name="CUT_OFF_ID")
 	private Timesheet timesheet;
 
-	public Date getTimeIN() {
-		return timeIN;
+	public Date getTimeIn() {
+		return timeIn;
 	}
 
-	public void setTimeIN(Date timeIN) {
-		this.timeIN = timeIN;
+	public void setTimeIn(Date timeIn) {
+		this.timeIn = timeIn;
 	}
 
 	public Date getTimeOut() {
@@ -63,6 +67,20 @@ public class DailyTimeRecord extends BaseEntity{
 
 	public void setTimesheet(Timesheet timesheet) {
 		this.timesheet = timesheet;
+	}
+	
+	public String getTimeOutWithTime() {
+		if(getTimeOut() != null) {
+			return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").format(getTimeOut());
+		}
+		return "";
+	}
+	
+	public String getTimeInWithTime() {
+		if(getTimeOut() != null) {
+			return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").format(getTimeIn());
+		}
+		return "";
 	}
 		
 }
