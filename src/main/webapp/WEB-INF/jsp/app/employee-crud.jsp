@@ -220,7 +220,7 @@
 			<input type="datetime-local" readonly="readonly" value="{{timeOutWithTime}}" name="timeOut" data-id={{id}} />
 		</div>
 		<div class="span2">
-			<i class='icon-save save-skill-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-save save-dtr-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
 			<i class='icon-pencil edit-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
 			<i class='icon-trash remove-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>
 		</div>
@@ -378,6 +378,20 @@
 						skillRow.find('.edit-skill-action').removeClass('hide');
 						skillRow.find('.remove-skill-action').removeClass('hide');
 					}
+				},
+					dataType : 'json'
+			});
+			
+		}).on('click', '.remove-skill-action', function() {
+			var skillRow = $(this).closest('.skill-row');
+			
+			var id = $(this).data('id');
+			
+			$.ajax({type : 'POST', // method
+				url : 'skill/' + id, // url
+				type : 'delete',
+				success : function(json) { // callback
+					skillRow.remove();
 				},
 					dataType : 'json'
 			});
