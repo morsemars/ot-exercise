@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ideyatech.ot.tutorial.entity.DailyTimeRecord;
-import com.ideyatech.ot.tutorial.entity.Employee;
 import com.ideyatech.ot.tutorial.entity.Timesheet;
 
 @Controller

@@ -201,10 +201,10 @@
 			<input type="text" readonly="readonly" value="{{rating}}" name="rating" data-id={{id}} />
 		</div>
 		<div class="span2">
-			<i class='icon-save save-skill-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
-			<i class='icon-save update-skill-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
-			<i class='icon-pencil edit-skill-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
-			<i class='icon-trash remove-skill-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>
+			<i class='icon-save save-skill-action hide' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-save update-skill-action hide' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-pencil edit-skill-action' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-trash remove-skill-action' data-title="<spring:message code="label.delete" />"></i>
 		</div>
 		
 	</form>
@@ -212,18 +212,18 @@
 
 <script type="text/template" id="dtr-template">
 	<form class="row-fluid dtr-row" data-id={{id}}>
-		<input type="hidden" readonly="readonly" id="timesheet" value="{{id}}" name="timesheet" data-id={{id}} />
+		<input type="hidden" readonly="readonly" id="timesheet" value="{{id}}" name="timesheet"/>
 		<div class="span5">
-			<input type="datetime-local" readonly="readonly" value="{{timeInWithTime}}" name="timeIn" data-id={{id}} />
+			<input type="datetime-local" readonly="readonly" value="{{timeInWithTime}}" name="timeIn"/>
 		</div>
 		<div class="span5">
-			<input type="datetime-local" readonly="readonly" value="{{timeOutWithTime}}" name="timeOut" data-id={{id}} />
+			<input type="datetime-local" readonly="readonly" value="{{timeOutWithTime}}" name="timeOut"/>
 		</div>
 		<div class="span2">
-			<i class='icon-save save-dtr-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
-			<i class='icon-save update-dtr-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
-			<i class='icon-pencil edit-dtr-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
-			<i class='icon-trash remove-dtr-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>
+			<i class='icon-save save-dtr-action hide' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-save update-dtr-action hide' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-pencil edit-dtr-action' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-trash remove-dtr-action' data-title="<spring:message code="label.delete" />"></i>
 		</div>
 	</form>
 </script>
@@ -257,43 +257,6 @@
 			$('.footable').footable();
 			
 			$('body').tooltip({selector: '.edit-action, .remove-action'});
-			
-			$('.icon-wrench').click(function() {
-				$('#skills-body .skills-container').empty();//empty div before displaying results
-				var id = $(this).data('id');
-				$('#skills-body').modal('show');
-				$('#skills-body').data('employee', id);
-				$.getJSON(
-					'skill/findByEmployeeId/' + id, // url
-					null, // data
-					function(skills) { // callback
-						var template = opentides3.template($('#skills-template').html());
-						$.each(skills, function(i, skill) {
-							var skillRow = template(skill);
-							$('#skills-body .skills-container').append(skillRow);
-						})
-					}
-				);
-			});
-			
-			$('.icon-time').click(function() {
-				$('#dtr-body #timesheet,.dtr-container').empty();//empty div before displaying results
-				var id = $(this).data('id');
-				$('#dtr-body').modal('show');
-				$('#dtr-body').data('employee', id);
-				$.getJSON(
-					'timesheet/findByEmployeeId/' + id, // url
-					null, // data
-					function(timesheets) { // callback
-						var template = opentides3.template($('#timesheet-template').html());
-						$.each(timesheets, function(i, timesheet) {
-							var cutOff = template(timesheet);
-							$('#dtr-body #timesheet').append(cutOff);
-						});
-						loadDTR();
-					}
-				);
-			});
 			
 			$('#timesheet').change(function() {
 				loadDTR();
@@ -332,8 +295,42 @@
 				newRow.find('.remove-skill-action').addClass('hide');
 			});
 			
+		}).on('click', '.icon-wrench', function(){
+			$('#skills-body .skills-container').empty();//empty div before displaying results
+			var id = $(this).data('id');
+			$('#skills-body').modal('show');
+			$('#skills-body').data('employee', id);
+			$.getJSON(
+				'skill/findByEmployeeId/' + id, // url
+				null, // data
+				function(skills) { // callback
+					var template = opentides3.template($('#skills-template').html());
+					$.each(skills, function(i, skill) {
+						var skillRow = template(skill);
+						$('#skills-body .skills-container').append(skillRow);
+					})
+				}
+			);
+		}).on('click', '.icon-time', function(){
+			$('#dtr-body #timesheet,.dtr-container').empty();//empty div before displaying results
+			var id = $(this).data('id');
+			$('#dtr-body').modal('show');
+			$('#dtr-body').data('employee', id);
+			$.getJSON(
+				'timesheet/findByEmployeeId/' + id, // url
+				null, // data
+				function(timesheets) { // callback
+					var template = opentides3.template($('#timesheet-template').html());
+					$.each(timesheets, function(i, timesheet) {
+						var cutOff = template(timesheet);
+						$('#dtr-body #timesheet').append(cutOff);
+					});
+					loadDTR();
+				}
+			);
 		}).on('click', '.save-skill-action', function() {
 			var skillRow = $(this).closest('.skill-row');
+			console.log(skillRow);
 			$.ajax({type : 'POST', // method
 				url : 'skill', // url
 				data : skillRow.serialize(), // data
@@ -345,6 +342,10 @@
 						skillRow.find('.edit-skill-action').removeClass('hide');
 						skillRow.find('.remove-skill-action').removeClass('hide');
 					}
+					console.log(json.command.id);
+					console.log(skillRow.find('input#employee'));
+					skillRow.find('input#employee').attr('value',json.command.id);
+					console.log(skillRow.find('input#employee'));
 				},
 					dataType : 'json'
 			});
@@ -356,15 +357,14 @@
 			skillRow.find('.update-skill-action').removeClass('hide');
 			skillRow.find('.edit-skill-action').addClass('hide');
 			skillRow.find('.remove-skill-action').addClass('hide');
+			skillRow.find('input#employee').attr('name', 'id');
 			
-			$("input#employee").attr('name', 'id');
+			//$("input#employee").attr('name', 'id');
 			console.log(skillRow.serialize());
 			
 		}).on('click', '.update-skill-action', function() {
 			var skillRow = $(this).closest('.skill-row');
-			
-			var id = $(this).data('id');
-			
+			var id = skillRow.find('input#employee').attr('value');
 			console.log(id);
 			console.log(skillRow.serialize());
 			
@@ -385,8 +385,9 @@
 			
 		}).on('click', '.remove-skill-action', function() {
 			var skillRow = $(this).closest('.skill-row');
-			
-			var id = $(this).data('id');
+			var id = skillRow.find('input#employee').attr('value');
+			console.log(skillRow);
+			console.log(id);
 			
 			$.ajax({type : 'POST', // method
 				url : 'skill/' + id, // url
@@ -406,11 +407,14 @@
 					if (typeof (json.command) === 'object'
 						&& json.command.id > 0) {
 						dtrRow.find('input').prop('readonly', true);
-						skillRow.find('.save-dtr-action').addClass('hide');
-						skillRow.find('.edit-dtr-action').removeClass('hide');
-						skillRow.find('.remove-dtr-action').removeClass('hide');
+						dtrRow.find('.save-dtr-action').addClass('hide');
+						dtrRow.find('.edit-dtr-action').removeClass('hide');
+						dtrRow.find('.remove-dtr-action').removeClass('hide');
 					}
-					console.log(json);
+					console.log(json.command.id);
+					console.log(dtrRow.find('input#timesheet'));
+					dtrRow.find('input#timesheet').attr('value',json.command.id);
+					console.log(dtrRow.find('input#timesheet'));
 				},
 					dataType : 'json'
 			});
@@ -421,14 +425,15 @@
 			dtrRow.find('.update-dtr-action').removeClass('hide');
 			dtrRow.find('.edit-dtr-action').addClass('hide');
 			dtrRow.find('.remove-dtr-action').addClass('hide');
+			dtrRow.find('input#timesheet').attr('name','id');
 			
-			$("input#timesheet").attr('name', 'id');
+			//$("input#timesheet").attr('name', 'id');
 			console.log(dtrRow.serialize());
 			
 		}).on('click', '.update-dtr-action', function() {
 			var dtrRow = $(this).closest('.dtr-row');
 			
-			var id = $(this).data('id');
+			var id = dtrRow.find('input#timesheet').attr('value');
 			
 			console.log(id);
 			console.log(dtrRow.serialize());
@@ -451,7 +456,7 @@
 		}).on('click', '.remove-dtr-action', function() {
 			var dtrRow = $(this).closest('.dtr-row');
 			
-			var id = $(this).data('id');
+			var id = dtrRow.find('input#timesheet').attr('value');
 			
 			$.ajax({type : 'POST', // method
 				url : 'dailytimerecord/' + id, // url
