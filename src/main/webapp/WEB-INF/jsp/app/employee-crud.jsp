@@ -193,7 +193,7 @@
 
 <script type="text/template" id="skills-template">
 	<form class="row-fluid skill-row" data-id={{id}}>
-			<input type="hidden" readonly="readonly" value="{{id}}" name="employee" data-id={{id}} />
+			<input type="hidden" readonly="readonly" id="employee" value="{{id}}" name="employee" data-id={{id}} />
 		<div class="span5">
 			<input type="text" readonly="readonly" value="{{name}}" name="name" data-id={{id}} />
 		</div>
@@ -202,8 +202,9 @@
 		</div>
 		<div class="span2">
 			<i class='icon-save save-skill-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
-			<i class='icon-pencil edit-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
-			<i class='icon-trash remove-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>
+			<i class='icon-save update-skill-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-pencil edit-skill-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-trash remove-skill-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>
 		</div>
 		
 	</form>
@@ -305,8 +306,8 @@
 				newRow = newRow.find('.skill-row').last();
 				newRow.find('input').prop('readonly', false);
 				newRow.find('.save-skill-action').removeClass('hide');
-				newRow.find('.edit-action').addClass('hide');
-				newRow.find('.remove-action').addClass('hide');
+				newRow.find('.edit-skill-action').addClass('hide');
+				newRow.find('.remove-skill-action').addClass('hide');
 			});
 			
 		}).on('click', '.save-skill-action', function() {
@@ -319,12 +320,47 @@
 						&& json.command.id > 0) {
 						skillRow.find('input').prop('readonly', true);
 						skillRow.find('.save-skill-action').addClass('hide');
-						skillRow.find('.edit-action').removeClass('hide');
-						skillRow.find('.remove-action').removeClass('hide');
+						skillRow.find('.edit-skill-action').removeClass('hide');
+						skillRow.find('.remove-skill-action').removeClass('hide');
 					}
 				},
 					dataType : 'json'
 			});
+
+		}).on('click', '.edit-skill-action', function() {
+			var skillRow = $(this).closest('.skill-row');
+			
+			skillRow.find('input').prop('readonly', false);
+			skillRow.find('.update-skill-action').removeClass('hide');
+			skillRow.find('.edit-skill-action').addClass('hide');
+			skillRow.find('.remove-skill-action').addClass('hide');
+			
+			$("input#employee").attr('name', 'id');
+			console.log(skillRow.serialize());
+			
+		}).on('click', '.update-skill-action', function() {
+			var skillRow = $(this).closest('.skill-row');
+			
+			var id = $(this).data('id');
+			
+			console.log(id);
+			console.log(skillRow.serialize());
+			
+			$.ajax({type : 'POST', // method
+				url : 'skill/' + id, // url
+				data : skillRow.serialize(), // data
+				success : function(json) { // callback
+					if (typeof (json.command) === 'object'
+						&& json.command.id > 0) {
+						skillRow.find('input').prop('readonly', true);
+						skillRow.find('.update-skill-action').addClass('hide');
+						skillRow.find('.edit-skill-action').removeClass('hide');
+						skillRow.find('.remove-skill-action').removeClass('hide');
+					}
+				},
+					dataType : 'json'
+			});
+			
 		}).on('click', '.save-dtr-action', function() {
 			var dtrRow = $(this).closest('.dtr-row');
 			console.log(dtrRow.serialize());

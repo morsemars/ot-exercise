@@ -31,8 +31,8 @@
 			<div class="search-form collapse">
 				<form:form modelAttribute="searchCommand" id="timesheet-search" >
 					<!-- Define search fields here -->
-					<tides:date_picker label="label.timesheet.startCutOff" path="startCutOff"/>
-					<tides:date_picker label="label.timesheet.endCutOff" path="endCutOff"/>
+					<tides:input label="label.timesheet.startCutOff" path="startCutOff"/>
+					<tides:input label="label.timesheet.endCutOff" path="endCutOff"/>
 					<hr/>
 					<input type="submit" class="btn btn-info btn-block" data-submit="search" value="<spring:message code="label.search"/>">
 					<button type="button" class="btn btn-link btn-block" data-submit="clear"><spring:message code="label.clear" /></button>
@@ -73,9 +73,9 @@
 						<script type="text/template" class="template">
 	                		<tr id="timesheet-row-{{id}}" data-id="{{id}}">
 								<!-- Define template here -->
+								<td>{{record.employee.fullName}}</td>
 								<td>{{record.startCutOff}}</td>
 								<td>{{record.endCutOff}}</td>
-								<td>{{record.employee.fullName}}</td>
 								<td>
 									<i class='icon-pencil edit-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
 									<i class='icon-trash remove-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>
@@ -86,9 +86,9 @@
 							<tr data-id="${record.id}">
 								<!-- Define table body here -->
 
+								<td><c:out value="${record.employee.fullName}"></c:out></td>
 								<td><c:out value="${record.startCutOff}"></c:out></td>
 								<td><c:out value="${record.endCutOff}"></c:out></td>
-								<td><c:out value="${record.employee.fullName}"></c:out></td>
 								<td>
 									<i class='icon-pencil edit-action' data-id='${record.id}' data-title="<spring:message code="label.edit" />"></i>
 									<i class='icon-trash remove-action' data-id='${record.id}' data-title="<spring:message code="label.delete" />"></i>
