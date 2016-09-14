@@ -382,6 +382,20 @@
 					dataType : 'json'
 			});
 			
+		}).on('click', '.remove-skill-action', function() {
+			var skillRow = $(this).closest('.skill-row');
+			
+			var id = $(this).data('id');
+			
+			$.ajax({type : 'POST', // method
+				url : 'skill/' + id, // url
+				type : 'delete',
+				success : function(json) { // callback
+					skillRow.remove();
+				},
+					dataType : 'json'
+			});
+			
 		}).on('click', '.save-dtr-action', function() {
 			var dtrRow = $(this).closest('.dtr-row');
 			$.ajax({type : 'POST', // method
