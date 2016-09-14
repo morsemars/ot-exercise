@@ -220,9 +220,9 @@
 			<input type="datetime-local" readonly="readonly" value="{{timeOutWithTime}}" name="timeOut" data-id={{id}} />
 		</div>
 		<div class="span2">
-			<i class='icon-save save-skill-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
-			<i class='icon-pencil edit-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
-			<i class='icon-trash remove-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>
+			<i class='icon-save save-dtr-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-pencil edit-dtr-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-trash remove-dtr-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>
 		</div>
 	</form>
 </script>
@@ -308,7 +308,7 @@
 				var newRow = $('#dtr-body .dtr-container').append(newDTRRow);
 				newRow = newRow.find('.dtr-row').last();
 				newRow.find('input').prop('readonly', false);
-				newRow.find('.save-skill-action').removeClass('hide');
+				newRow.find('.save-dtr-action').removeClass('hide');
 				newRow.find('.edit-action').addClass('hide');
 				newRow.find('.remove-action').addClass('hide');
 			});
@@ -391,6 +391,9 @@
 					if (typeof (json.command) === 'object'
 						&& json.command.id > 0) {
 						dtrRow.find('input').prop('readonly', true);
+						skillRow.find('.save-dtr-action').addClass('hide');
+						skillRow.find('.edit-dtr-action').removeClass('hide');
+						skillRow.find('.remove-dtr-action').removeClass('hide');
 					}
 					console.log(json);
 				},
