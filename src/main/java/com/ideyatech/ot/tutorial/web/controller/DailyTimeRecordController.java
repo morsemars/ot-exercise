@@ -26,8 +26,8 @@ public class DailyTimeRecordController extends BaseCrudController<DailyTimeRecor
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm"), true));
 	}
 	
-	@RequestMapping(value = "/findByEmployeeId/{timesheetId}", produces = "application/json")
-	public @ResponseBody List<DailyTimeRecord> findTimesheetByEmployeeId(@PathVariable Long timesheetId) {
+	@RequestMapping(value = "/findByTimesheetId/{timesheetId}", produces = "application/json")
+	public @ResponseBody List<DailyTimeRecord> findByTimesheetId(@PathVariable Long timesheetId) {
 		DailyTimeRecord sample = new DailyTimeRecord();
 		Timesheet ts = new Timesheet();
 		ts.setId(timesheetId);

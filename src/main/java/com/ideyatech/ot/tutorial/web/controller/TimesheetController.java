@@ -28,7 +28,7 @@ public class TimesheetController extends BaseCrudController<Timesheet>{
 	}
 	
 	@RequestMapping(value = "/findByEmployeeId/{employeeId}", produces = "application/json")
-	public @ResponseBody List<Timesheet> findTimesheetByEmployeeId(@PathVariable Long employeeId) {
+	public @ResponseBody List<Timesheet> findByEmployeeId(@PathVariable Long employeeId) {
 		Timesheet sample = new Timesheet();
 		Employee e = new Employee();
 		e.setId(employeeId);

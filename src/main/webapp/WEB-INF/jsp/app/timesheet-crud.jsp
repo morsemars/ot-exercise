@@ -75,7 +75,7 @@
 								<!-- Define template here -->
 								<td>{{startCutOff}}</td>
 								<td>{{endCutOff}}</td>
-								<td>{{employee.fullName}}</td>
+								<td>{{employee.lastName}}, {{employee.firstName}}</td>
 								<td>
 									<i class='icon-pencil edit-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
 									<i class='icon-trash remove-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>
@@ -86,9 +86,10 @@
 							<tr data-id="${record.id}">
 								<!-- Define table body here -->
 
-								<td><c:out value="${record.employee.fullName}"></c:out></td>
 								<td><c:out value="${record.startCutOff}"></c:out></td>
 								<td><c:out value="${record.endCutOff}"></c:out></td>
+								<td><c:out value="${record.employee.lastName}, ${record.employee.firstName}"></c:out></td>
+								
 								<td>
 									<i class='icon-pencil edit-action' data-id='${record.id}' data-title="<spring:message code="label.edit" />"></i>
 									<i class='icon-trash remove-action' data-id='${record.id}' data-title="<spring:message code="label.delete" />"></i>
@@ -120,10 +121,10 @@
 			<div class="modal-body">
 				<div class="message-container"></div>
 				<!-- Define form fields here -->
-				<tides:date_picker label="label.timesheet.startCutOff" path="startCutOff"/>
-				<tides:date_picker label="label.timesheet.endCutOff" path="endCutOff"/>
 				<tides:select label="label.timesheet.employee" path="employee" items="${employees}" itemLabel="fullName" itemValue="id">
 				</tides:select>
+				<tides:date_picker label="label.timesheet.startCutOff" path="startCutOff"/>
+				<tides:date_picker label="label.timesheet.endCutOff" path="endCutOff"/>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-link" data-dismiss="modal"><spring:message code="label.close" /></button>

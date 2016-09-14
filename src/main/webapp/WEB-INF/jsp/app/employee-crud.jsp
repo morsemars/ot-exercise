@@ -212,7 +212,7 @@
 
 <script type="text/template" id="dtr-template">
 	<form class="row-fluid dtr-row" data-id={{id}}>
-		<input type="hidden" readonly="readonly" value="{{id}}" name="timesheet" data-id={{id}} />
+		<input type="hidden" readonly="readonly" id="timesheet" value="{{id}}" name="timesheet" data-id={{id}} />
 		<div class="span5">
 			<input type="datetime-local" readonly="readonly" value="{{timeInWithTime}}" name="timeIn" data-id={{id}} />
 		</div>
@@ -221,6 +221,7 @@
 		</div>
 		<div class="span2">
 			<i class='icon-save save-dtr-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
+			<i class='icon-save update-dtr-action hide' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
 			<i class='icon-pencil edit-dtr-action' data-id='{{id}}' data-title="<spring:message code="label.edit" />"></i>
 			<i class='icon-trash remove-dtr-action' data-id='{{id}}' data-title="<spring:message code="label.delete" />"></i>
 		</div>
@@ -237,7 +238,7 @@
 			$('#dtr-body .dtr-container').empty();
 			var id = $('#timesheet').val();
 			$.getJSON(
-				'dailytimerecord/findByEmployeeId/' + id, // url
+				'dailytimerecord/findByTimesheetId/' + id, // url
 				null, // data
 				function(DTRs) { // callback
 					var template = opentides3.template($('#dtr-template').html());
@@ -309,8 +310,8 @@
 				newRow = newRow.find('.dtr-row').last();
 				newRow.find('input').prop('readonly', false);
 				newRow.find('.save-dtr-action').removeClass('hide');
-				newRow.find('.edit-action').addClass('hide');
-				newRow.find('.remove-action').addClass('hide');
+				newRow.find('.edit-dtr-action').addClass('hide');
+				newRow.find('.remove-dtr-action').addClass('hide');
 			});
 			
 			$('#add-skill').click(function() {
@@ -413,6 +414,54 @@
 				},
 					dataType : 'json'
 			});
+		}).on('click', '.edit-dtr-action', function() {
+			var dtrRow = $(this).closest('.dtr-row');
+			
+			dtrRow.find('input').prop('readonly', false);
+			dtrRow.find('.update-dtr-action').removeClass('hide');
+			dtrRow.find('.edit-dtr-action').addClass('hide');
+			dtrRow.find('.remove-dtr-action').addClass('hide');
+			
+			$("input#timesheet").attr('name', 'id');
+			console.log(dtrRow.serialize());
+			
+		}).on('click', '.update-dtr-action', function() {
+			var dtrRow = $(this).closest('.dtr-row');
+			
+			var id = $(this).data('id');
+			
+			console.log(id);
+			console.log(dtrRow.serialize());
+			
+			$.ajax({type : 'POST', // method
+				url : 'dailytimerecord/' + id, // url
+				data : dtrRow.serialize(), // data
+				success : function(json) { // callback
+					if (typeof (json.command) === 'object'
+						&& json.command.id > 0) {
+						dtrRow.find('input').prop('readonly', true);
+						dtrRow.find('.update-dtr-action').addClass('hide');
+						dtrRow.find('.edit-dtr-action').removeClass('hide');
+						dtrRow.find('.remove-dtr-action').removeClass('hide');
+					}
+				},
+					dataType : 'json'
+			});
+			
+		}).on('click', '.remove-dtr-action', function() {
+			var dtrRow = $(this).closest('.dtr-row');
+			
+			var id = $(this).data('id');
+			
+			$.ajax({type : 'POST', // method
+				url : 'dailytimerecord/' + id, // url
+				type : 'delete',
+				success : function(json) { // callback
+					dtrRow.remove();
+				},
+					dataType : 'json'
+			});
+			
 		});
 	</script>
 </tides:footer>
