@@ -229,7 +229,7 @@
 </script>
 
 <script type="text/template" id="timesheet-template">
-	<option value="{{id}}">{{cutoff}}</option>
+	<option value="{{id}}">{{startCutOff}} to {{endCutOff}}</option>
 </script>
 
 <tides:footer>
@@ -330,7 +330,6 @@
 			);
 		}).on('click', '.save-skill-action', function() {
 			var skillRow = $(this).closest('.skill-row');
-			console.log(skillRow);
 			$.ajax({type : 'POST', // method
 				url : 'skill', // url
 				data : skillRow.serialize(), // data
@@ -342,10 +341,7 @@
 						skillRow.find('.edit-skill-action').removeClass('hide');
 						skillRow.find('.remove-skill-action').removeClass('hide');
 					}
-					console.log(json.command.id);
-					console.log(skillRow.find('input#employee'));
 					skillRow.find('input#employee').attr('value',json.command.id);
-					console.log(skillRow.find('input#employee'));
 				},
 					dataType : 'json'
 			});
@@ -359,14 +355,9 @@
 			skillRow.find('.remove-skill-action').addClass('hide');
 			skillRow.find('input#employee').attr('name', 'id');
 			
-			//$("input#employee").attr('name', 'id');
-			console.log(skillRow.serialize());
-			
 		}).on('click', '.update-skill-action', function() {
 			var skillRow = $(this).closest('.skill-row');
 			var id = skillRow.find('input#employee').attr('value');
-			console.log(id);
-			console.log(skillRow.serialize());
 			
 			$.ajax({type : 'POST', // method
 				url : 'skill/' + id, // url
@@ -386,8 +377,6 @@
 		}).on('click', '.remove-skill-action', function() {
 			var skillRow = $(this).closest('.skill-row');
 			var id = skillRow.find('input#employee').attr('value');
-			console.log(skillRow);
-			console.log(id);
 			
 			$.ajax({type : 'POST', // method
 				url : 'skill/' + id, // url
@@ -411,10 +400,7 @@
 						dtrRow.find('.edit-dtr-action').removeClass('hide');
 						dtrRow.find('.remove-dtr-action').removeClass('hide');
 					}
-					console.log(json.command.id);
-					console.log(dtrRow.find('input#timesheet'));
 					dtrRow.find('input#timesheet').attr('value',json.command.id);
-					console.log(dtrRow.find('input#timesheet'));
 				},
 					dataType : 'json'
 			});
@@ -427,16 +413,10 @@
 			dtrRow.find('.remove-dtr-action').addClass('hide');
 			dtrRow.find('input#timesheet').attr('name','id');
 			
-			//$("input#timesheet").attr('name', 'id');
-			console.log(dtrRow.serialize());
-			
 		}).on('click', '.update-dtr-action', function() {
 			var dtrRow = $(this).closest('.dtr-row');
 			
 			var id = dtrRow.find('input#timesheet').attr('value');
-			
-			console.log(id);
-			console.log(dtrRow.serialize());
 			
 			$.ajax({type : 'POST', // method
 				url : 'dailytimerecord/' + id, // url

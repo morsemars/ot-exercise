@@ -34,13 +34,6 @@ public class Timesheet extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="EMP_ID")
 	private Employee employee;
-	
-	@Transient
-	private String cutoff;
-	
-	public String getCutoff() {
-		return startCutOff.toString() +" to " + endCutOff.toString();
-	}
 
 	public Date getStartCutOff() {
 		return startCutOff;

@@ -44,9 +44,6 @@ public class Employee extends BaseEntity{
 	private Date startDate;
 	
 	@Transient
-	private String fullName;
-	
-	@Transient
 	private Date endDate;
 	
 	public String getFullName() {
