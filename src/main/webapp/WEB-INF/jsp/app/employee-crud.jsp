@@ -330,14 +330,14 @@
 			console.log(dtrRow.serialize());
 			console.log("${home}");
 			$.ajax({type : 'POST', // method
-				url : '/${home}/dailytimerecord', // url
+				url : '${home}/dailytimerecord', // url
 				data : dtrRow.serialize(), // data
 				success : function(json) { // callback
 					if (typeof (json.command) === 'object'
 						&& json.command.id > 0) {
 						dtrRow.find('input').prop('readonly', true);
 					}
-					console.log("SUCCESS!!");
+					console.log(json);
 				},
 					dataType : 'json'
 			});

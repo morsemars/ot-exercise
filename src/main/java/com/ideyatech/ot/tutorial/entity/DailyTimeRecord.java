@@ -20,7 +20,7 @@ public class DailyTimeRecord extends BaseEntity{
 	
 	@Column(name="TIME_IN")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date timeIN;
+	private Date timeIn;
 	
 	@Column(name="TIME_OUT")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -33,12 +33,12 @@ public class DailyTimeRecord extends BaseEntity{
 	@JoinColumn(name="CUT_OFF_ID")
 	private Timesheet timesheet;
 
-	public Date getTimeIN() {
-		return timeIN;
+	public Date getTimeIn() {
+		return timeIn;
 	}
 
-	public void setTimeIN(Date timeIN) {
-		this.timeIN = timeIN;
+	public void setTimeIn(Date timeIn) {
+		this.timeIn = timeIn;
 	}
 
 	public Date getTimeOut() {
